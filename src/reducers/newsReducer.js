@@ -5,7 +5,7 @@ const newsReducer = (state, action) => {
     case "SET_ARTICLES":
       return { ...state, articles: [...state.articles, ...action.articles] };
     default:
-      throw new Error();
+      return state;
   }
 };
 

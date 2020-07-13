@@ -16,6 +16,6 @@ export const getNews = async page => {
     });
     return data.response.docs;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };

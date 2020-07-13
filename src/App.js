@@ -28,8 +28,8 @@ const App = () => {
       current.onscroll = e => {
         const { scrollHeight, scrollTop, clientHeight } = e.target;
         if (scrollHeight - (scrollTop + clientHeight) < 10 && !isLazy) {
-          setIsLazy(true);
           newsDispatch({ type: "INCREASE_PAGE" });
+          setIsLazy(true);
         }
       };
     }
@@ -37,12 +37,14 @@ const App = () => {
 
   useEffect(() => {
     let isSubscribed = true;
-    getNews(news.page).then(response => {
-      if (isSubscribed) {
-        newsDispatch({ type: "SET_ARTICLES", articles: response });
-        setIsLazy(false);
-      }
-    });
+    getNews(news.page)
+      .then(response => {
+        if (isSubscribed) {
+          newsDispatch({ type: "SET_ARTICLES", articles: response });
+          setIsLazy(false);
+        }
+      })
+      .catch(console.error);
     return () => (isSubscribed = false);
   }, [news.page]);
 
@@ -54,8 +56,8 @@ const App = () => {
         className={classes.newsWrapper}
         ref={newsRef}
       >
-        {news.articles.map((article, i) => (
-          <NewsCard key={i} {...article} />
+        {news.articles.map((article, index) => (
+          <NewsCard key={index} {...article} />
         ))}
         {(_.isEmpty(news.articles) || isLazy) && <Loader />}
       </Box>
