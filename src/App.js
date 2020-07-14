@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useLayoutEffect,
-  useRef,
-  useReducer
-} from "react";
+import React, { useEffect, useLayoutEffect, useRef, useReducer } from "react";
 import { Paper, Grid, Box } from "@material-ui/core";
 import _ from "lodash";
 import NewsCard from "./components/NewsCard";
@@ -15,11 +9,11 @@ import { AppStyles } from "./styles/App";
 
 const App = () => {
   const classes = AppStyles();
-  const [isLazy, setIsLazy] = useState(false);
   const newsRef = useRef();
   const [news, newsDispatch] = useReducer(newsReducer, {
     page: 0,
-    articles: []
+    articles: [],
+    isLazy: false
   });
 
   useLayoutEffect(() => {
@@ -27,22 +21,18 @@ const App = () => {
     if (current) {
       current.onscroll = e => {
         const { scrollHeight, scrollTop, clientHeight } = e.target;
-        if (scrollHeight - (scrollTop + clientHeight) < 10 && !isLazy) {
+        if (scrollHeight - (scrollTop + clientHeight) < 10 && !news.isLazy)
           newsDispatch({ type: "INCREASE_PAGE" });
-          setIsLazy(true);
-        }
       };
     }
-  }, [isLazy]);
+  }, [news.isLazy]);
 
   useEffect(() => {
     let isSubscribed = true;
     getNews(news.page)
       .then(response => {
-        if (isSubscribed) {
+        if (isSubscribed)
           newsDispatch({ type: "SET_ARTICLES", articles: response });
-          setIsLazy(false);
-        }
       })
       .catch(console.error);
     return () => (isSubscribed = false);
@@ -59,7 +49,7 @@ const App = () => {
         {news.articles.map((article, index) => (
           <NewsCard key={index} {...article} />
         ))}
-        {(_.isEmpty(news.articles) || isLazy) && <Loader />}
+        {(_.isEmpty(news.articles) || news.isLazy) && <Loader />}
       </Box>
     </Grid>
   );
