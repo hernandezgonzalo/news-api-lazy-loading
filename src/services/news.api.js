@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_NEWS_API_URL
+  baseURL: "https://api.nytimes.com/svc/search/v2"
 });
 
 export const getNews = async page => {
