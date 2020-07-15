@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useReducer } from "react";
+import React, { useEffect, useRef, useReducer } from "react";
 import { Paper, Grid, Box } from "@material-ui/core";
 import _ from "lodash";
 import NewsCard from "./components/NewsCard";
@@ -13,10 +13,10 @@ const App = () => {
   const [news, newsDispatch] = useReducer(newsReducer, {
     page: 0,
     articles: [],
-    isLazy: false
+    isLazy: true
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const { current } = newsRef;
     if (current) {
       current.onscroll = e => {
