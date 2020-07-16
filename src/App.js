@@ -30,9 +30,8 @@ const App = () => {
   useEffect(() => {
     let isSubscribed = true;
     getNews(news.page)
-      .then(response => {
-        if (isSubscribed)
-          newsDispatch({ type: "SET_ARTICLES", articles: response });
+      .then(articles => {
+        if (isSubscribed) newsDispatch({ type: "SET_ARTICLES", articles });
       })
       .catch(console.error);
     return () => (isSubscribed = false);
